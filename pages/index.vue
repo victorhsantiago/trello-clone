@@ -14,6 +14,7 @@
             v-for="(task, $taskIndex) of column.tasks"
             :key="$taskIndex"
             class="task"
+            @click="goToTask(task.id)"
           >
             <span class="w-full flex-no-shrink font-bold">
               {{ task.name }}
@@ -28,6 +29,9 @@
         </div>
       </div>
     </div>
+    <div v-if="isTaskOpen" class="task-bg" @click.self="closeTask">
+      <nuxt-child />
+    </div>
   </div>
 </template>
 
@@ -35,27 +39,24 @@
 import { mapState } from 'vuex'
 
 export default {
-  computed: mapState('board', ['board']),
+  computed: {
+    ...mapState('board', ['board']),
+    isTaskOpen() {
+      return this.$route.name === 'index-task-id'
+    },
+  },
+  methods: {
+    goToTask(id) {
+      this.$router.push({ name: 'index-task-id', params: { id } })
+    },
+    closeTask() {
+      this.$router.push({ name: 'index' })
+    },
+  },
 }
 </script>
 
 <style lang="css">
-body,
-html {
-  height: 100%;
-}
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  height: 100%;
-}
-.container {
-  @apply mx-auto;
-}
-
 .task {
   @apply flex;
   @apply items-center;
@@ -82,12 +83,15 @@ html {
 
 .board {
   @apply p-4;
-  @apply bg-teal-700;
   @apply h-full;
   @apply overflow-auto;
 }
 .task-bg {
   @apply absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
 }
 </style>
