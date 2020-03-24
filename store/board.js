@@ -1,4 +1,4 @@
-import { saveStatePlugin } from '../utils'
+import { saveStatePlugin, uuid } from '../utils'
 import defaultBoard from '@/defaultBoard'
 
 const board = process.browser
@@ -18,5 +18,18 @@ export const getters = {
         if (task.id === id) return task
       }
     }
+  },
+}
+
+export const mutations = {
+  CREATE_TASK(state, { tasks, name }) {
+    tasks.push({
+      name,
+      id: uuid(),
+      description: '',
+    })
+  },
+  UPDATE_TASK(state, { task, key, value }) {
+    task[key] = value
   },
 }

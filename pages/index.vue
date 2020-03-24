@@ -26,6 +26,12 @@
               {{ task.description }}
             </p>
           </div>
+          <input
+            type="text"
+            class="block p-2 w-full bg-transparent"
+            placeholder="+ Enter new task"
+            @keyup.enter="createTask(column.tasks, $event)"
+          />
         </div>
       </div>
     </div>
@@ -36,7 +42,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   computed: {
@@ -46,11 +52,16 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('board', ['CREATE_TASK']),
     goToTask(id) {
       this.$router.push({ name: 'index-task-id', params: { id } })
     },
     closeTask() {
       this.$router.push({ name: 'index' })
+    },
+    createTask(tasks, event) {
+      this.CREATE_TASK({ tasks, name: event.target.value })
+      event.target.value = ''
     },
   },
 }
