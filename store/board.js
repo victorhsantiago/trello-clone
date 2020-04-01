@@ -1,12 +1,8 @@
 import { uuid } from '../utils'
 import defaultBoard from '@/defaultBoard'
 
-const board = process.browser
-  ? JSON.parse(localStorage.getItem('board')) || defaultBoard
-  : defaultBoard
-
 export const state = () => ({
-  board,
+  board: defaultBoard,
 })
 
 export const getters = {
@@ -20,6 +16,12 @@ export const getters = {
 }
 
 export const mutations = {
+  GET_USER_BOARD(state) {
+    if (localStorage.getItem('board')) {
+      const { board } = JSON.parse(localStorage.getItem('board'))
+      state.board = board
+    }
+  },
   CREATE_TASK(state, { tasks, name }) {
     tasks.push({
       name,

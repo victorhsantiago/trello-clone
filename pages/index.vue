@@ -51,8 +51,11 @@ export default {
       return this.$route.name === 'index-task-id'
     },
   },
+  mounted() {
+    this.GET_USER_BOARD()
+  },
   methods: {
-    ...mapMutations('board', ['CREATE_TASK']),
+    ...mapMutations('board', ['CREATE_TASK', 'GET_USER_BOARD']),
     goToTask(id) {
       this.$router.push({ name: 'index-task-id', params: { id } })
     },
