@@ -5,6 +5,9 @@
         v-for="(column, $columnIndex) of board.columns"
         :key="$columnIndex"
         class="column"
+        @drop="moveTask($event, column.tasks)"
+        @dragover.prevent
+        @dragenter.prevent
       >
         <div class="flex items-center mb-2 font-bold">
           {{ column.name }}
@@ -14,6 +17,8 @@
             v-for="(task, $taskIndex) of column.tasks"
             :key="$taskIndex"
             class="task"
+            draggable
+            @dragstart="pickUpTask($event, $taskIndex, $columnIndex)"
             @click="goToTask(task.id)"
           >
             <span class="w-full flex-no-shrink font-bold">
@@ -55,7 +60,7 @@ export default {
     this.GET_USER_BOARD()
   },
   methods: {
-    ...mapMutations('board', ['CREATE_TASK', 'GET_USER_BOARD']),
+    ...mapMutations('board', ['GET_USER_BOARD', 'CREATE_TASK', 'MOVE_TASK']),
     goToTask(id) {
       this.$router.push({ name: 'index-task-id', params: { id } })
     },
@@ -68,6 +73,20 @@ export default {
         name: event.target.value,
       })
       event.target.value = ''
+    },
+    pickUpTask(event, taskIndex, fromColumnIndex) {
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.dropEffect = 'move'
+
+      event.dataTransfer.setData('task-index', taskIndex)
+      event.dataTransfer.setData('from-column-index', fromColumnIndex)
+    },
+    moveTask(event, toTasks) {
+      const fromColumnIndex = event.dataTransfer.getData('from-column-index')
+      const fromTasks = this.board.columns[fromColumnIndex].tasks
+      const taskIndex = event.dataTransfer.getData('task-index')
+
+      this.MOVE_TASK({ fromTasks, toTasks, taskIndex })
     },
   },
 }
