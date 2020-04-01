@@ -60,7 +60,10 @@ export default {
       this.$router.push({ name: 'index' })
     },
     createTask(tasks, event) {
-      this.CREATE_TASK({ tasks, name: event.target.value })
+      this.$store.commit('board/CREATE_TASK', {
+        tasks,
+        name: event.target.value,
+      })
       event.target.value = ''
     },
   },

@@ -30,7 +30,7 @@ export default {
   methods: {
     ...mapMutations('board', ['UPDATE_TASK']),
     updateTaskProperty(key, event) {
-      this.UPDATE_TASK({
+      this.$store.commit('board/UPDATE_TASK', {
         task: this.task,
         key,
         value: event.target.value,
