@@ -36,4 +36,9 @@ export const mutations = {
     const taskToMove = fromTasks.splice(taskIndex, 1)[0]
     toTasks.push(taskToMove)
   },
+  MOVE_COLUMN(state, { fromColumnIndex, toColumnIndex }) {
+    const columnList = state.board.columns
+    const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
+    columnList.splice(toColumnIndex, 0, columnToMove)
+  },
 }
