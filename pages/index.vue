@@ -46,6 +46,14 @@
           />
         </div>
       </div>
+      <div class="column flex">
+        <input
+          type="text"
+          class="block p-2 w-full bg-transparent"
+          placeholder="+ Create new column"
+          @keyup.enter="createColumn($event)"
+        />
+      </div>
     </div>
     <div v-if="isTaskOpen" class="task-bg" @click.self="closeTask">
       <nuxt-child />
@@ -70,6 +78,7 @@ export default {
     ...mapMutations('board', [
       'GET_USER_BOARD',
       'CREATE_TASK',
+      'CREATE_COLUMN',
       'MOVE_TASK',
       'REORDER_TASK',
       'MOVE_COLUMN',
@@ -83,6 +92,12 @@ export default {
     createTask(tasks, event) {
       this.CREATE_TASK({
         tasks,
+        name: event.target.value,
+      })
+      event.target.value = ''
+    },
+    createColumn(event) {
+      this.CREATE_COLUMN({
         name: event.target.value,
       })
       event.target.value = ''

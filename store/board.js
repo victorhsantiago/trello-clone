@@ -29,6 +29,9 @@ export const mutations = {
       description: '',
     })
   },
+  CREATE_COLUMN(state, { name }) {
+    state.board.columns.push({ name, tasks: [] })
+  },
   UPDATE_TASK(state, { task, key, value }) {
     task[key] = value
   },
