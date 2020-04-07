@@ -6,7 +6,7 @@
     @dragenter.prevent
     @dragstart="pickUpTask($event, taskIndex, columnIndex)"
     @click="goToTask(task.id)"
-    @drop.stop="moveTaskOrColumn($event, column.tasks, columnIndex, taskIndex)"
+    @drop.stop="moveTask($event, column.tasks, columnIndex, taskIndex)"
   >
     <span class="w-full flex-no-shrink font-bold">
       {{ task.name }}
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('board', ['MOVE_TASK']),
+    ...mapActions('board', ['moveTaskOrColumn']),
     goToTask(id) {
       this.$router.push({ name: 'index-task-id', params: { id } })
     },
@@ -56,24 +56,8 @@ export default {
       event.dataTransfer.setData('from-column-index', fromColumnIndex)
       event.dataTransfer.setData('type', 'task')
     },
-    moveTask(event, toTasks, toTaskIndex) {
-      const fromColumnIndex = event.dataTransfer.getData('from-column-index')
-      const fromTasks = this.board.columns[fromColumnIndex].tasks
-      const fromTaskIndex = event.dataTransfer.getData('from-task-index')
-
-      this.MOVE_TASK({ fromTasks, toTasks, fromTaskIndex, toTaskIndex })
-    },
-    moveTaskOrColumn(event, toTasks, toColumnIndex, toTaskIndex) {
-      const type = event.dataTransfer.getData('type')
-      if (type === 'task') {
-        this.moveTask(
-          event,
-          toTasks,
-          toTaskIndex !== undefined ? toTaskIndex : toTasks.length
-        )
-      } else {
-        this.moveColumn(event, toColumnIndex)
-      }
+    moveTask(event, toTasks, toColumnIndex, toTaskIndex) {
+      this.moveTaskOrColumn({ event, toTasks, toColumnIndex, toTaskIndex })
     },
   },
 }

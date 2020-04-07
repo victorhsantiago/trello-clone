@@ -2,7 +2,7 @@
   <div
     class="column"
     draggable
-    @drop="moveTaskOrColumn($event, column.tasks, columnIndex)"
+    @drop="moveColumn($event, column.tasks, columnIndex)"
     @dragover.prevent
     @dragenter.prevent
     @dragstart.self="pickUpColumn($event, columnIndex)"
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -52,7 +52,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('board', ['CREATE_COLUMN', 'MOVE_TASK', 'MOVE_COLUMN']),
+    ...mapActions('board', ['moveTaskOrColumn']),
+    ...mapMutations('board', ['CREATE_TASK']),
     createTask(tasks, event) {
       this.CREATE_TASK({
         tasks,
@@ -60,7 +61,6 @@ export default {
       })
       event.target.value = ''
     },
-
     pickUpColumn(event, fromColumnIndex) {
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.dropEffect = 'move'
@@ -68,29 +68,8 @@ export default {
       event.dataTransfer.setData('from-column-index', fromColumnIndex)
       event.dataTransfer.setData('type', 'column')
     },
-    moveTaskOrColumn(event, toTasks, toColumnIndex, toTaskIndex) {
-      const type = event.dataTransfer.getData('type')
-      if (type === 'task') {
-        this.moveTask(
-          event,
-          toTasks,
-          toTaskIndex !== undefined ? toTaskIndex : toTasks.length
-        )
-      } else {
-        this.moveColumn(event, toColumnIndex)
-      }
-    },
-    moveTask(event, toTasks, toTaskIndex) {
-      const fromColumnIndex = event.dataTransfer.getData('from-column-index')
-      const fromTasks = this.board.columns[fromColumnIndex].tasks
-      const fromTaskIndex = event.dataTransfer.getData('from-task-index')
-
-      this.MOVE_TASK({ fromTasks, toTasks, fromTaskIndex, toTaskIndex })
-    },
-    moveColumn(event, toColumnIndex) {
-      const fromColumnIndex = event.dataTransfer.getData('from-column-index')
-
-      this.MOVE_COLUMN({ fromColumnIndex, toColumnIndex })
+    moveColumn(event, toTasks, toColumnIndex, toTaskIndex) {
+      this.moveTaskOrColumn({ event, toTasks, toColumnIndex, toTaskIndex })
     },
   },
 }

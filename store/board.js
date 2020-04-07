@@ -15,6 +15,35 @@ export const getters = {
   },
 }
 
+export const actions = {
+  moveTaskOrColumn(
+    { dispatch },
+    { event, toTasks, toColumnIndex, toTaskIndex }
+  ) {
+    const type = event.dataTransfer.getData('type')
+    if (type === 'task') {
+      dispatch('moveTask', {
+        event,
+        toTasks,
+        toTaskIndex: toTaskIndex ?? toTasks.length,
+      })
+    } else {
+      dispatch('moveColumn', { event, toColumnIndex })
+    }
+  },
+  moveTask({ state, commit }, { event, toTasks, toTaskIndex }) {
+    const fromColumnIndex = event.dataTransfer.getData('from-column-index')
+    const fromTasks = state.board.columns[fromColumnIndex].tasks
+    const fromTaskIndex = event.dataTransfer.getData('from-task-index')
+
+    commit('MOVE_TASK', { fromTasks, toTasks, fromTaskIndex, toTaskIndex })
+  },
+  moveColumn({ commit }, { event, toColumnIndex }) {
+    const fromColumnIndex = event.dataTransfer.getData('from-column-index')
+    commit('MOVE_COLUMN', { fromColumnIndex, toColumnIndex })
+  },
+}
+
 export const mutations = {
   GET_USER_BOARD(state) {
     if (localStorage.getItem('board')) {
