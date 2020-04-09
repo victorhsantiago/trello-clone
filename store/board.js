@@ -16,31 +16,27 @@ export const getters = {
 }
 
 export const actions = {
-  moveTaskOrColumn(
-    { dispatch },
-    { event, toTasks, toColumnIndex, toTaskIndex }
-  ) {
-    const type = event.dataTransfer.getData('type')
-    if (type === 'task') {
-      dispatch('moveTask', {
-        event,
-        toTasks,
-        toTaskIndex: toTaskIndex ?? toTasks.length,
-      })
-    } else {
-      dispatch('moveColumn', { event, toColumnIndex })
+  moveTaskOrColumn({ dispatch }, dragData) {
+    const move = {
+      task: () => dispatch('moveTask', dragData),
+      column: () => dispatch('moveColumn', dragData),
     }
-  },
-  moveTask({ state, commit }, { event, toTasks, toTaskIndex }) {
-    const fromColumnIndex = event.dataTransfer.getData('from-column-index')
-    const fromTasks = state.board.columns[fromColumnIndex].tasks
-    const fromTaskIndex = event.dataTransfer.getData('from-task-index')
 
-    commit('MOVE_TASK', { fromTasks, toTasks, fromTaskIndex, toTaskIndex })
+    move[dragData.type]()
   },
-  moveColumn({ commit }, { event, toColumnIndex }) {
-    const fromColumnIndex = event.dataTransfer.getData('from-column-index')
-    commit('MOVE_COLUMN', { fromColumnIndex, toColumnIndex })
+  moveTask({ state, commit }, { fromColumn, toColumn, toTask, from }) {
+    const fromTasks = state.board.columns[fromColumn].tasks
+    const toTasks = state.board.columns[toColumn].tasks
+
+    commit('MOVE_TASK', {
+      fromTasks,
+      toTasks,
+      from,
+      toTask: toTask ?? toTasks.length,
+    })
+  },
+  moveColumn({ commit }, { from, toColumn }) {
+    commit('MOVE_COLUMN', { from, toColumn })
   },
 }
 
@@ -64,13 +60,13 @@ export const mutations = {
   UPDATE_TASK(state, { task, key, value }) {
     task[key] = value
   },
-  MOVE_TASK(state, { fromTasks, toTasks, fromTaskIndex, toTaskIndex }) {
-    const taskToMove = fromTasks.splice(fromTaskIndex, 1)[0]
-    toTasks.splice(toTaskIndex, 0, taskToMove)
+  MOVE_TASK(state, { fromTasks, toTasks, from, toTask }) {
+    const taskToMove = fromTasks.splice(from, 1)[0]
+    toTasks.splice(toTask, 0, taskToMove)
   },
-  MOVE_COLUMN(state, { fromColumnIndex, toColumnIndex }) {
+  MOVE_COLUMN(state, { from, toColumn }) {
     const columnList = state.board.columns
-    const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
-    columnList.splice(toColumnIndex, 0, columnToMove)
+    const columnToMove = columnList.splice(from, 1)[0]
+    columnList.splice(toColumn, 0, columnToMove)
   },
 }
