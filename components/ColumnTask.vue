@@ -38,10 +38,6 @@ export default {
       type: Object,
       required: true,
     },
-    board: {
-      type: Object,
-      required: true,
-    },
   },
   methods: {
     ...mapActions('board', ['moveTaskOrColumn']),
