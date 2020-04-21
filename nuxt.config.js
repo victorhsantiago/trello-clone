@@ -23,7 +23,10 @@ export default {
   /*
    ** Global CSS
    */
-  css: ['~/assets/css/tailwind.css'],
+  css: [
+    '~/assets/css/tailwind.css',
+    '@fortawesome/fontawesome-svg-core/styles.css',
+  ],
   render: {
     bundleRenderer: {
       shouldPreload: (file, type) => {
@@ -34,7 +37,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: [],
+  plugins: ['~/plugins/fontawesome.js'],
   /*
    ** Nuxt.js dev-modules
    */
@@ -49,24 +52,15 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    [
-      'nuxt-fontawesome',
-      {
-        component: 'fa',
-        imports: [
-          {
-            set: '@fortawesome/free-solid-svg-icons',
-            icons: ['fas'],
-          },
-        ],
-      },
-    ],
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+  purgeCSS: {
+    whitelistPatterns: [/fa/],
+  },
   /*
    ** Build configuration
    */
