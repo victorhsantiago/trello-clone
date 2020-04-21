@@ -1,5 +1,5 @@
 <template>
-  <div
+  <span
     draggable
     @dragstart.self="onDrag"
     @dragover.prevent
@@ -7,7 +7,7 @@
     v-on="$listeners"
   >
     <slot />
-  </div>
+  </span>
 </template>
 
 <script>

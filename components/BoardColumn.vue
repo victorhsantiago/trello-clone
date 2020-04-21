@@ -1,14 +1,25 @@
 <template>
   <app-drop :to-column="columnIndex" @drop="moveTaskOrColumn">
-    <app-drag
-      class="column"
-      :drag-data="{
-        type: 'column',
-        from: columnIndex,
-      }"
-    >
-      <div class="flex items-center mb-2 font-bold">
+    <div class="column">
+      <div class="flex items-center mb-2 font-bold justify-between">
         {{ column.name }}
+        <div>
+          <fa
+            class="opacity-50 cursor-pointer ml-2"
+            :icon="['fas', 'trash-alt']"
+          />
+          <app-drag
+            :drag-data="{
+              type: 'column',
+              from: columnIndex,
+            }"
+          >
+            <fa
+              class="opacity-50 cursor-move ml-2"
+              :icon="['fas', 'grip-vertical']"
+            />
+          </app-drag>
+        </div>
       </div>
       <div class="list-reset">
         <column-task
@@ -27,7 +38,7 @@
           @keyup.enter="createTask(column.tasks, $event)"
         />
       </div>
-    </app-drag>
+    </div>
   </app-drop>
 </template>
 
