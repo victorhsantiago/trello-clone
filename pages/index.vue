@@ -1,6 +1,6 @@
 <template>
   <div class="board">
-    <div class="flex flex-row items-start">
+    <div class=" flex flex-row items-start h-full">
       <board-column
         v-for="(column, $columnIndex) of board.columns"
         :key="$columnIndex"
@@ -58,7 +58,8 @@ export default {
 .board {
   @apply p-4;
   @apply h-full;
-  @apply overflow-auto;
+  @apply overflow-x-auto;
+  @apply overflow-y-hidden;
 }
 
 .task-bg {

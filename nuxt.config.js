@@ -25,6 +25,7 @@ export default {
    */
   css: [
     '~/assets/css/tailwind.css',
+    '~/assets/css/styles.css',
     '@fortawesome/fontawesome-svg-core/styles.css',
   ],
   render: {

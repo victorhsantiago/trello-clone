@@ -21,7 +21,7 @@
           </app-drag>
         </div>
       </div>
-      <div class="list-reset">
+      <div class="list-reset overflow-y-scroll overflow-x-hidden">
         <column-task
           v-for="(task, $taskIndex) of column.tasks"
           :key="$taskIndex"
@@ -78,15 +78,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.column {
-  @apply bg-gray-300;
-  @apply p-2;
-  @apply mr-4;
-  @apply text-left;
-  @apply shadow;
-  @apply rounded;
-  min-width: 350px;
-}
-</style>
