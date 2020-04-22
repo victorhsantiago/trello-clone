@@ -2,9 +2,11 @@
 
 > Trello clone made with NuxtJS
 
+![home](https://i.ibb.co/jDY4VK9/Screenshot-2020-04-22-Trello-Nuxt.png)
+
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ yarn install
 
