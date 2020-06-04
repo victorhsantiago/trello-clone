@@ -10,7 +10,7 @@
     <div class="flex items-center mb-2 font-bold">
       {{ column.name }}
     </div>
-    <div class="list-reset">
+    <div class="task-list">
       <column-task
         v-for="(task, $taskIndex) of column.tasks"
         :key="$taskIndex"
@@ -20,13 +20,13 @@
         :column="column"
         :board="board"
       />
-      <input
-        type="text"
-        class="block p-2 w-full bg-transparent"
-        placeholder="+ Enter new task"
-        @keyup.enter="createTask(column.tasks, $event)"
-      />
     </div>
+    <input
+      type="text"
+      class="block p-2 w-full bg-transparent"
+      placeholder="+ Enter new task"
+      @keyup.enter="createTask(column.tasks, $event)"
+    />
   </div>
 </template>
 

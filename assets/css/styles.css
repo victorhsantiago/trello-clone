@@ -6,6 +6,12 @@
   @apply shadow;
   @apply rounded;
   @apply overflow-hidden;
-  @apply min-h-0;
+  @apply max-h-full;
+  @apply flex;
+  @apply flex-col;
   min-width: 300px;
+}
+
+.task-list {
+  overflow-y: auto;
 }
