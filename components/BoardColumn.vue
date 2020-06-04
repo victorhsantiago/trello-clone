@@ -1,45 +1,33 @@
 <template>
-  <app-drop :to-column="columnIndex" @drop="moveTaskOrColumn">
-    <div class="column">
-      <div class="flex items-center mb-2 font-bold justify-between">
-        {{ column.name }}
-        <div>
-          <fa
-            class="opacity-50 cursor-pointer ml-2"
-            :icon="['fas', 'trash-alt']"
-          />
-          <app-drag
-            :drag-data="{
-              type: 'column',
-              from: columnIndex,
-            }"
-          >
-            <fa
-              class="opacity-50 cursor-move ml-2"
-              :icon="['fas', 'grip-vertical']"
-            />
-          </app-drag>
-        </div>
-      </div>
-      <div class="list-reset">
-        <column-task
-          v-for="(task, $taskIndex) of column.tasks"
-          :key="$taskIndex"
-          :task="task"
-          :task-index="$taskIndex"
-          :column-index="columnIndex"
-          :column="column"
-          :board="board"
-        />
-        <input
-          type="text"
-          class="block p-2 w-full bg-transparent"
-          placeholder="+ Enter new task"
-          @keyup.enter="createTask(column.tasks, $event)"
-        />
-      </div>
+  <div
+    class="column"
+    draggable
+    @drop="moveColumn($event, column.tasks, columnIndex)"
+    @dragover.prevent
+    @dragenter.prevent
+    @dragstart.self="pickUpColumn($event, columnIndex)"
+  >
+    <div class="flex items-center mb-2 font-bold">
+      {{ column.name }}
     </div>
-  </app-drop>
+    <div class="task-list">
+      <column-task
+        v-for="(task, $taskIndex) of column.tasks"
+        :key="$taskIndex"
+        :task="task"
+        :task-index="$taskIndex"
+        :column-index="columnIndex"
+        :column="column"
+        :board="board"
+      />
+    </div>
+    <input
+      type="text"
+      class="block p-2 w-full bg-transparent"
+      placeholder="+ Enter new task"
+      @keyup.enter="createTask(column.tasks, $event)"
+    />
+  </div>
 </template>
 
 <script>
@@ -47,8 +35,6 @@ import { mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
-    AppDrag: () => import('./AppDrag'),
-    AppDrop: () => import('./AppDrop'),
     ColumnTask: () => import('./ColumnTask'),
   },
   props: {
@@ -75,18 +61,16 @@ export default {
       })
       event.target.value = ''
     },
+    pickUpColumn(event, fromColumnIndex) {
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.dropEffect = 'move'
+
+      event.dataTransfer.setData('from-column-index', fromColumnIndex)
+      event.dataTransfer.setData('type', 'column')
+    },
+    moveColumn(event, toTasks, toColumnIndex, toTaskIndex) {
+      this.moveTaskOrColumn({ event, toTasks, toColumnIndex, toTaskIndex })
+    },
   },
 }
 </script>
-
-<style scoped>
-.column {
-  @apply bg-gray-300;
-  @apply p-2;
-  @apply mr-4;
-  @apply text-left;
-  @apply shadow;
-  @apply rounded;
-  min-width: 350px;
-}
-</style>

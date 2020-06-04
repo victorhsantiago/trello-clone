@@ -1,0 +1,17 @@
+.column {
+  @apply bg-gray-300;
+  @apply p-2;
+  @apply mr-4;
+  @apply text-left;
+  @apply shadow;
+  @apply rounded;
+  @apply overflow-hidden;
+  @apply max-h-full;
+  @apply flex;
+  @apply flex-col;
+  min-width: 300px;
+}
+
+.task-list {
+  overflow-y: auto;
+}

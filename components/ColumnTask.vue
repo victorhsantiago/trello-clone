@@ -1,36 +1,26 @@
 <template>
-  <app-drop
-    :to-column="columnIndex"
-    :to-task="taskIndex"
-    @drop="moveTaskOrColumn"
+  <div
+    class="task"
+    draggable
+    @dragover.prevent
+    @dragenter.prevent
+    @dragstart="pickUpTask($event, taskIndex, columnIndex)"
+    @click="goToTask(task.id)"
+    @drop.stop="moveTask($event, column.tasks, columnIndex, taskIndex)"
   >
-    <app-drag
-      class="task"
-      :drag-data="{
-        type: 'task',
-        from: taskIndex,
-        fromColumn: columnIndex,
-      }"
-      @click="goToTask(task.id)"
-    >
-      <span class="w-full flex-no-shrink font-bold">
-        {{ task.name }}
-      </span>
-      <p v-if="task.description" class="w-full flex-no-shrink mt-1 text-sm">
-        {{ task.description }}
-      </p>
-    </app-drag>
-  </app-drop>
+    <span class="w-full flex-no-shrink font-bold">
+      {{ task.name }}
+    </span>
+    <p v-if="task.description" class="w-full flex-no-shrink mt-1 text-sm">
+      {{ task.description }}
+    </p>
+  </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
 export default {
-  components: {
-    AppDrag: () => import('./AppDrag'),
-    AppDrop: () => import('./AppDrop'),
-  },
   props: {
     task: {
       type: Object,
@@ -53,6 +43,17 @@ export default {
     ...mapActions('board', ['moveTaskOrColumn']),
     goToTask(id) {
       this.$router.push({ name: 'index-task-id', params: { id } })
+    },
+    pickUpTask(event, taskIndex, fromColumnIndex) {
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.dropEffect = 'move'
+
+      event.dataTransfer.setData('from-task-index', taskIndex)
+      event.dataTransfer.setData('from-column-index', fromColumnIndex)
+      event.dataTransfer.setData('type', 'task')
+    },
+    moveTask(event, toTasks, toColumnIndex, toTaskIndex) {
+      this.moveTaskOrColumn({ event, toTasks, toColumnIndex, toTaskIndex })
     },
   },
 }
