@@ -12,7 +12,7 @@
       {{ task.name }}
     </span>
     <p v-if="task.description" class="w-full flex-no-shrink mt-1 text-sm">
-      {{ task.description }}
+      <fa class="opacity-50" :icon="['fas', 'align-left']" />
     </p>
   </div>
 </template>
