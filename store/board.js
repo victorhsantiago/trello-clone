@@ -73,4 +73,8 @@ export const mutations = {
     const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
     columnList.splice(toColumnIndex, 0, columnToMove)
   },
+  DELETE_COLUMN(state, columnIndex) {
+    const columnList = state.board.columns
+    columnList.splice(columnIndex, 1)
+  },
 }

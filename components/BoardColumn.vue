@@ -7,8 +7,9 @@
     @dragenter.prevent
     @dragstart.self="pickUpColumn($event, columnIndex)"
   >
-    <div class="flex items-center mb-2 font-bold">
+    <div class="flex items-center mb-2 font-bold justify-between">
       {{ column.name }}
+      <dropdown-menu :column-index="columnIndex" />
     </div>
     <div class="task-list">
       <column-task
@@ -36,6 +37,7 @@ import { mapActions, mapMutations } from 'vuex'
 export default {
   components: {
     ColumnTask: () => import('./ColumnTask'),
+    DropdownMenu: () => import('./DropdownMenu'),
   },
   props: {
     column: {
