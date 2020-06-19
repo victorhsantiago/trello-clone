@@ -1,5 +1,7 @@
 # trello-clone
 
+![Deploy](https://github.com/victorhsantiago/trello-clone/workflows/Deploy/badge.svg?branch=master)
+
 > Trello clone made with NuxtJS
 
 ![home](https://i.ibb.co/jDY4VK9/Screenshot-2020-04-22-Trello-Nuxt.png)
